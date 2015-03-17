@@ -112,13 +112,14 @@ def intermittent_opened_count(previous_date, next_date):
         if len(instances) < 3:
             continue
 
-        for x in instance:
+        timestamps = [x['timestamp'] for x in instances]
+        timestamps.sort()
+
+        for x in instances:
             if x['timestamp'] == timestamps[0]:
                 oldest_instance = x
         cmd = "python trigger.py --rev %s --back-revisions 30 --times 30 --skip 15 --buildername \"%s\"" % (oldest_instance['revision'], oldest_instance['buildname'])
 
-        timestamps = [x['timestamp'] for x in instances]
-        timestamps.sort()
         time_to_second = 0
         time_to_last = 0
         if len(timestamps) > 1:
